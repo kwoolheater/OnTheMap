@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		41A050351E9424BC0062FAA1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A050341E9424BC0062FAA1 /* Constants.swift */; };
 		41E6CDDF1E8EDB560014ABEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E6CDDE1E8EDB560014ABEA /* AppDelegate.swift */; };
 		41E6CDE11E8EDB560014ABEA /* MapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E6CDE01E8EDB560014ABEA /* MapsViewController.swift */; };
 		41E6CDE41E8EDB560014ABEA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 41E6CDE21E8EDB560014ABEA /* Main.storyboard */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		41A050341E9424BC0062FAA1 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		41E6CDDB1E8EDB560014ABEA /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		41E6CDDE1E8EDB560014ABEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		41E6CDE01E8EDB560014ABEA /* MapsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapsViewController.swift; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				41E6CDDE1E8EDB560014ABEA /* AppDelegate.swift */,
+				41A050341E9424BC0062FAA1 /* Constants.swift */,
 				41E6CDF01E8EF8D10014ABEA /* LoginViewController.swift */,
 				41E6CDE01E8EDB560014ABEA /* MapsViewController.swift */,
 				41E6CDE21E8EDB560014ABEA /* Main.storyboard */,
@@ -141,6 +144,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				41E6CDF11E8EF8D10014ABEA /* LoginViewController.swift in Sources */,
+				41A050351E9424BC0062FAA1 /* Constants.swift in Sources */,
 				41E6CDE11E8EDB560014ABEA /* MapsViewController.swift in Sources */,
 				41E6CDDF1E8EDB560014ABEA /* AppDelegate.swift in Sources */,
 			);
@@ -304,6 +308,7 @@
 				41E6CDEF1E8EDB560014ABEA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
