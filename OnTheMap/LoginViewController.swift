@@ -37,7 +37,7 @@ class LoginViewController: UIViewController {
     
     private func completeLogin() {
         performUIUpdatesOnMain {
-            let controller = self.storyboard!.instantiateViewController(withIdentifier: "MapsViewController") as! UIViewController
+            let controller = self.storyboard!.instantiateViewController(withIdentifier: "tableViewController") as! UITabBarController
             self.present(controller, animated: true, completion: nil)
         }
     }
