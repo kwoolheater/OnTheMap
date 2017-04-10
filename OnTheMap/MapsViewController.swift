@@ -20,9 +20,11 @@ class ViewController: UIViewController, MKMapViewDelegate {
         appDelegate = UIApplication.shared.delegate as! AppDelegate
         
         loadStudentLocations()
-        
-            
-        
+        navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil), //add action
+            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: nil) //add action
+            ]
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: nil) //add action
         
     }
     
