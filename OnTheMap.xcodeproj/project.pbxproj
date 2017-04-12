@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4115F3FC1E9BE1F400436C84 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4115F3FB1E9BE1F400436C84 /* TableViewController.swift */; };
+		4115F3FE1E9C0A7100436C84 /* people.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4115F3FD1E9C0A7100436C84 /* people.swift */; };
+		4115F4001E9D217800436C84 /* LoadingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4115F3FF1E9D217800436C84 /* LoadingOverlay.swift */; };
 		41A050351E9424BC0062FAA1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A050341E9424BC0062FAA1 /* Constants.swift */; };
 		41E6CDDF1E8EDB560014ABEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E6CDDE1E8EDB560014ABEA /* AppDelegate.swift */; };
 		41E6CDE11E8EDB560014ABEA /* MapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E6CDE01E8EDB560014ABEA /* MapsViewController.swift */; };
@@ -19,6 +21,8 @@
 
 /* Begin PBXFileReference section */
 		4115F3FB1E9BE1F400436C84 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewController.swift; path = ../TableViewController.swift; sourceTree = "<group>"; };
+		4115F3FD1E9C0A7100436C84 /* people.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = people.swift; path = ../people.swift; sourceTree = "<group>"; };
+		4115F3FF1E9D217800436C84 /* LoadingOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingOverlay.swift; sourceTree = "<group>"; };
 		41A050341E9424BC0062FAA1 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		41E6CDDB1E8EDB560014ABEA /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		41E6CDDE1E8EDB560014ABEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -62,6 +66,8 @@
 			children = (
 				41E6CDDE1E8EDB560014ABEA /* AppDelegate.swift */,
 				41A050341E9424BC0062FAA1 /* Constants.swift */,
+				4115F3FD1E9C0A7100436C84 /* people.swift */,
+				4115F3FF1E9D217800436C84 /* LoadingOverlay.swift */,
 				41E6CDF01E8EF8D10014ABEA /* LoginViewController.swift */,
 				41E6CDE01E8EDB560014ABEA /* MapsViewController.swift */,
 				4115F3FB1E9BE1F400436C84 /* TableViewController.swift */,
@@ -148,7 +154,9 @@
 			files = (
 				41E6CDF11E8EF8D10014ABEA /* LoginViewController.swift in Sources */,
 				41A050351E9424BC0062FAA1 /* Constants.swift in Sources */,
+				4115F3FE1E9C0A7100436C84 /* people.swift in Sources */,
 				41E6CDE11E8EDB560014ABEA /* MapsViewController.swift in Sources */,
+				4115F4001E9D217800436C84 /* LoadingOverlay.swift in Sources */,
 				4115F3FC1E9BE1F400436C84 /* TableViewController.swift in Sources */,
 				41E6CDDF1E8EDB560014ABEA /* AppDelegate.swift in Sources */,
 			);

@@ -67,25 +67,6 @@ class LoginViewController: UIViewController {
                 print("Could not parse the data as JSON: '\(String(describing: newData))'")
                 return
             }
-            
-//            for _ in parsedResult {
-//                guard let account = parsedResult["account"] as? [String:AnyObject] else {
-//                    print("Could not find account in \(parsedResult).")
-//                    return
-//                }
-//                
-//                for (key, value) in account {
-//                    if key == "registered" {
-//                        print(value)
-//                        self.appDelegate.userID = key
-//                        success = key as! Int
-//                        print(success)
-//                    } else {
-//                        print("mother ")
-//                    }
-//                }
-//                
-//            }
         
             guard let session = parsedResult["session"] as? [String:AnyObject] else {
                 print("Could not find session in \(String(describing: parsedResult["session"]))")

@@ -128,7 +128,7 @@
         <scene sceneID="kil-3C-4Uk">
             <objects>
                 <navigationController id="4fe-ga-ZUh" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Table" id="Zbh-jF-IOh"/>
+                    <tabBarItem key="tabBarItem" title="Table" image="listView" id="Zbh-jF-IOh"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="5BP-Gk-Kxk">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -150,12 +150,32 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Pcx-jE-JXv">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="personCell" textLabel="Vdr-4l-BIL" detailTextLabel="LiL-cG-wCL" imageView="YBz-C8-g0b" style="IBUITableViewCellStyleSubtitle" id="Pcx-jE-JXv">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Pcx-jE-JXv" id="IF5-ae-HYW">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Vdr-4l-BIL">
+                                            <rect key="frame" x="54" y="5" width="33.5" height="20.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="tableImage" id="YBz-C8-g0b">
+                                            <rect key="frame" x="15" y="9" width="24" height="24"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </imageView>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Detail" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LiL-cG-wCL">
+                                            <rect key="frame" x="54" y="25.5" width="33" height="14.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
@@ -166,6 +186,9 @@
                     </tableView>
                     <tabBarItem key="tabBarItem" title="Table" id="MJo-QX-bGv" userLabel="Table"/>
                     <navigationItem key="navigationItem" id="hmO-WV-VYd"/>
+                    <connections>
+                        <outlet property="peopleTableView" destination="jyk-sJ-TOi" id="Gms-IB-e9y"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xlD-5o-ggi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -175,7 +198,7 @@
         <scene sceneID="anl-G6-2HB">
             <objects>
                 <navigationController id="zb5-pK-YAh" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Map" id="BSj-0m-n8h"/>
+                    <tabBarItem key="tabBarItem" title="Map" image="mapViewSelected" selectedImage="mapViewSelected" id="BSj-0m-n8h"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="j7y-VL-fUX">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -212,7 +235,7 @@
                             <constraint firstItem="W4V-2t-wR8" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="-20" id="tJ0-SS-Bse"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Map" id="4MU-q4-q6K" userLabel="Map"/>
+                    <tabBarItem key="tabBarItem" title="Map" image="mapView" selectedImage="mapViewSelected" id="4MU-q4-q6K" userLabel="Map"/>
                     <navigationItem key="navigationItem" id="Dgn-QD-YUM"/>
                     <connections>
                         <outlet property="mapView" destination="W4V-2t-wR8" id="dJ9-ky-fp0"/>
@@ -225,5 +248,9 @@
     </scenes>
     <resources>
         <image name="Icon" width="62" height="62"/>
+        <image name="listView" width="75" height="50"/>
+        <image name="mapView" width="75" height="50"/>
+        <image name="mapViewSelected" width="75" height="50"/>
+        <image name="tableImage" width="24" height="24"/>
     </resources>
 </document>

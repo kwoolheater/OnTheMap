@@ -18,17 +18,17 @@ class ViewController: UIViewController, MKMapViewDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         appDelegate = UIApplication.shared.delegate as! AppDelegate
-        
+
         loadStudentLocations()
         navigationItem.rightBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil), //add action
-            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: nil) //add action
+            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refresh)) //add action
             ]
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: nil) //add action
-        
     }
     
     func loadStudentLocations() {
+        LoadingOverlay.shared.showOverlay(view: mapView)
         let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
@@ -70,6 +70,22 @@ class ViewController: UIViewController, MKMapViewDelegate {
             
         }
         task.resume()
+        LoadingOverlay.shared.hideOverlayView()
+    }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        
+        if let annotation = view.annotation {
+            if let url = URL(string: annotation.subtitle as! String) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }
+        
+    }
+    
+    func refresh() {
+        loadStudentLocations()
+        print("success")
     }
     
 }
