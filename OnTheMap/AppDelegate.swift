@@ -13,8 +13,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    var sessionID: String? = "123"
-    var userID: Int? = nil
+    var sessionID: String? = nil
+    var uniqueKey: String? = nil
     
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {

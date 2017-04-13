@@ -194,11 +194,89 @@
             </objects>
             <point key="canvasLocation" x="2286" y="495"/>
         </scene>
+        <!--addPinController-->
+        <scene sceneID="2ku-sQ-uNQ">
+            <objects>
+                <viewController storyboardIdentifier="addPinController" title="addPinController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Osf-Az-Gda" customClass="addPinController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="viq-B6-Axe"/>
+                        <viewControllerLayoutGuide type="bottom" id="jgD-vE-dfn"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="3ZH-ZL-Ctm">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Qcu-pu-itx">
+                                <rect key="frame" x="16" y="176" width="343" height="181"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="worldIcon" translatesAutoresizingMaskIntoConstraints="NO" id="jXd-Tw-UEh">
+                                        <rect key="frame" x="145.5" y="0.0" width="52" height="67"/>
+                                    </imageView>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Location" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="89e-gn-aOJ">
+                                        <rect key="frame" x="0.0" y="75" width="343" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Website" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8Pe-Lv-8Oq">
+                                        <rect key="frame" x="0.0" y="113" width="343" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jkT-FX-A11">
+                                        <rect key="frame" x="0.0" y="151" width="343" height="30"/>
+                                        <color key="backgroundColor" red="0.11644961684942245" green="0.73091226816177368" blue="0.91472887992858887" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" title="Button">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="89e-gn-aOJ" secondAttribute="trailing" id="Avl-cm-3Mm"/>
+                                    <constraint firstItem="89e-gn-aOJ" firstAttribute="leading" secondItem="Qcu-pu-itx" secondAttribute="leading" id="aOO-Hg-qZQ"/>
+                                    <constraint firstAttribute="trailing" secondItem="jkT-FX-A11" secondAttribute="trailing" id="bdU-dr-c2Q"/>
+                                    <constraint firstItem="jkT-FX-A11" firstAttribute="leading" secondItem="Qcu-pu-itx" secondAttribute="leading" id="fXB-PF-kIC"/>
+                                    <constraint firstItem="8Pe-Lv-8Oq" firstAttribute="leading" secondItem="Qcu-pu-itx" secondAttribute="leading" id="njO-qb-etO"/>
+                                    <constraint firstAttribute="trailing" secondItem="8Pe-Lv-8Oq" secondAttribute="trailing" id="zAC-Tf-zZU"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Qcu-pu-itx" firstAttribute="leading" secondItem="3ZH-ZL-Ctm" secondAttribute="leadingMargin" id="BWf-Zq-P6g"/>
+                            <constraint firstItem="jgD-vE-dfn" firstAttribute="top" secondItem="Qcu-pu-itx" secondAttribute="bottom" constant="310" id="IYa-2V-ErO"/>
+                            <constraint firstItem="Qcu-pu-itx" firstAttribute="top" secondItem="viq-B6-Axe" secondAttribute="bottom" constant="112" id="j3k-Bp-UWf"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Qcu-pu-itx" secondAttribute="trailing" id="uzO-ie-vOM"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="V3L-A2-UnP"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LcE-GN-mrB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3951" y="135"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="3jF-97-ozN">
+            <objects>
+                <navigationController id="orV-Qw-l10" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="4Gi-nD-sws">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="Osf-Az-Gda" kind="relationship" relationship="rootViewController" id="Crj-jF-sqc"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ag5-Hj-3QB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3172" y="134"/>
+        </scene>
         <!--Map-->
         <scene sceneID="anl-G6-2HB">
             <objects>
                 <navigationController id="zb5-pK-YAh" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Map" image="mapViewSelected" selectedImage="mapViewSelected" id="BSj-0m-n8h"/>
+                    <tabBarItem key="tabBarItem" title="Map" image="mapView" selectedImage="mapView" id="BSj-0m-n8h"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="j7y-VL-fUX">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -214,7 +292,7 @@
         <!--Maps View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="MapsViewController" id="BYZ-38-t0r" userLabel="Maps View Controller" customClass="ViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MapsViewController" id="BYZ-38-t0r" userLabel="Maps View Controller" customClass="MapsViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -235,7 +313,7 @@
                             <constraint firstItem="W4V-2t-wR8" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="-20" id="tJ0-SS-Bse"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Map" image="mapView" selectedImage="mapViewSelected" id="4MU-q4-q6K" userLabel="Map"/>
+                    <tabBarItem key="tabBarItem" title="Map" image="mapView" selectedImage="mapView" id="4MU-q4-q6K" userLabel="Map"/>
                     <navigationItem key="navigationItem" id="Dgn-QD-YUM"/>
                     <connections>
                         <outlet property="mapView" destination="W4V-2t-wR8" id="dJ9-ky-fp0"/>
@@ -250,7 +328,7 @@
         <image name="Icon" width="62" height="62"/>
         <image name="listView" width="75" height="50"/>
         <image name="mapView" width="75" height="50"/>
-        <image name="mapViewSelected" width="75" height="50"/>
         <image name="tableImage" width="24" height="24"/>
+        <image name="worldIcon" width="52" height="67"/>
     </resources>
 </document>

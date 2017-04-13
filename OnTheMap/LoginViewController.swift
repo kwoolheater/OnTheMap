@@ -67,16 +67,29 @@ class LoginViewController: UIViewController {
                 print("Could not parse the data as JSON: '\(String(describing: newData))'")
                 return
             }
-        
+
             guard let session = parsedResult["session"] as? [String:AnyObject] else {
-                print("Could not find session in \(String(describing: parsedResult["session"]))")
+                print("Could not find session in \(String(describing: parsedResult))")
                 return
             }
             
             guard let sessionId = session["id"] as? String else {
-                print("Could not find ID in \(String(describing: session["id"]))")
+                print("Could not find ID in \(String(describing: session))")
                 return
             }
+            
+            guard let account = parsedResult["account"] as? [String:AnyObject] else {
+                print("Could not find account in \(String(describing: parsedResult))")
+                return
+            }
+            
+            guard let uniqueKey = account["key"] as? String else {
+                print("Could not find key in \(String(describing: account))")
+                return
+            }
+            
+            
+            self.appDelegate.uniqueKey = uniqueKey
             self.appDelegate.sessionID = sessionId
             self.completeLogin()
         }
