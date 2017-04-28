@@ -20,11 +20,18 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
         appDelegate = UIApplication.shared.delegate as! AppDelegate
 
         loadStudentLocations()
+        checkForPreviousLocation()
         navigationItem.rightBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(add)), //add action
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refresh)) //add action
             ]
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: nil) //add action
+    }
+    
+    func performUIUpdatesOnMain(_ updates: @escaping () -> Void) {
+        DispatchQueue.main.async {
+            updates()
+        }
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -113,16 +120,33 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
     
     func add() {
         //add if statment for checking location 
-        checkForPreviousLocation()
+        
         if previousLocation == false {
-            let controller = storyboard!.instantiateViewController(withIdentifier: "addPinController") as! addPinController
+            let controller = storyboard!.instantiateViewController(withIdentifier: "AddPinController") as! AddPinController
             navigationController!.pushViewController(controller, animated: true)
         } else {
-            let alert = UIAlertController(title: "Alert", message: "My alert for test", preferredStyle: UIAlertControllerStyle.alert)
+            let alert = UIAlertController(title: "", message: "User has already posted a student location. Would you like to overwrite their location?", preferredStyle: UIAlertControllerStyle.alert)
+            
+            let okAction = UIAlertAction(title: "Overwrite", style: UIAlertActionStyle.default) {
+                (result : UIAlertAction) -> Void in
+                
+                
+                let controller = self.storyboard!.instantiateViewController(withIdentifier: "AddPinController") as! AddPinController
+                self.navigationController!.pushViewController(controller, animated: true)
+            }
+            
+            let DestructiveAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default) {
+                (result : UIAlertAction) -> Void in
+                
+            }
+            
+            alert.addAction(okAction)
+            alert.addAction(DestructiveAction)
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
-    var previousLocation: Bool
+    var previousLocation: Bool? = false
     
     func checkForPreviousLocation() {
         
@@ -159,10 +183,9 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
                     }
                     
                     self.previousLocation = true
-                   
+                    self.appDelegate.previousLocation = true
                 }
             }
-            print(parsedResult)
         }
         task.resume()
     }

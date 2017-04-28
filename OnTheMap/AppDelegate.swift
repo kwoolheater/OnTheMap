@@ -15,7 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var sessionID: String? = nil
     var uniqueKey: String? = nil
-    
+    var firstName: String? = nil
+    var lastName: String? = nil
+    var previousLocation: Bool? = false
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.

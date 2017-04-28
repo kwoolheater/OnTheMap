@@ -16,6 +16,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var email: UITextField!
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var iconImage: UIImageView!
+    @IBOutlet weak var logInButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +28,7 @@ class LoginViewController: UIViewController {
         subscribeToNotification(.UIKeyboardWillHide, selector: #selector(keyboardWillHide))
         subscribeToNotification(.UIKeyboardDidShow, selector: #selector(keyboardDidShow))
         subscribeToNotification(.UIKeyboardDidHide, selector: #selector(keyboardDidHide))
+        logInButton.layer.cornerRadius = 5
     }
     
     func performUIUpdatesOnMain(_ updates: @escaping () -> Void) {
@@ -67,7 +69,7 @@ class LoginViewController: UIViewController {
                 print("Could not parse the data as JSON: '\(String(describing: newData))'")
                 return
             }
-
+            
             guard let session = parsedResult["session"] as? [String:AnyObject] else {
                 print("Could not find session in \(String(describing: parsedResult))")
                 return
