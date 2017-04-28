@@ -25,7 +25,7 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(add)), //add action
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refresh)) //add action
             ]
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: nil) //add action
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logout)) //add action
     }
     
     func performUIUpdatesOnMain(_ updates: @escaping () -> Void) {
@@ -47,17 +47,14 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
             let calloutButton = UIButton(type: .detailDisclosure)
             pinView!.rightCalloutAccessoryView = calloutButton
             pinView!.sizeToFit()
-        }
-        else {
+        } else {
             pinView!.annotation = annotation
         }
-        
         
         return pinView
     }
     
     func loadStudentLocations() {
-        LoadingOverlay.shared.showOverlay(view: mapView)
         let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
@@ -65,6 +62,8 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             guard (error == nil) else {
                 print("There was an error with your request: \(String(describing: error))")
+                let alert = UIAlertController(title: "", message: "There was a network error with your request.", preferredStyle: UIAlertControllerStyle.alert)
+                self.present(alert, animated: true, completion: nil)
                 return
             }
             
@@ -99,7 +98,6 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
             
         }
         task.resume()
-        LoadingOverlay.shared.hideOverlayView()
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
@@ -112,10 +110,24 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
         
     }
     
+    func logout() {
+        //reset constants
+        appDelegate.sessionID = nil
+        appDelegate.uniqueKey = nil
+        appDelegate.firstName = nil
+        appDelegate.lastName = nil
+        appDelegate.previousLocation = false
+        //push to login controller
+        let controller = self.storyboard!.instantiateViewController(withIdentifier: "LoginViewController")
+        self.present(controller, animated: true, completion: nil)
+    }
+    
     func refresh() {
-        //insert delete locations
+        //delete locations on the map
+        let annotationsToRemove = mapView.annotations
+        mapView.removeAnnotations(annotationsToRemove)
+        
         loadStudentLocations()
-        print("success")
     }
     
     func add() {
@@ -130,9 +142,8 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
             let okAction = UIAlertAction(title: "Overwrite", style: UIAlertActionStyle.default) {
                 (result : UIAlertAction) -> Void in
                 
-                
-                let controller = self.storyboard!.instantiateViewController(withIdentifier: "AddPinController") as! AddPinController
-                self.navigationController!.pushViewController(controller, animated: true)
+                let controller = self.storyboard!.instantiateViewController(withIdentifier: "AddPinNavigationController")
+                self.present(controller, animated: true, completion: nil)
             }
             
             let DestructiveAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default) {
@@ -159,6 +170,7 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error
+                print("Previous Location Error!")
                 return
             }
             

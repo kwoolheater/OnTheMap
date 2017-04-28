@@ -13,7 +13,7 @@
         <!--Login View Controller-->
         <scene sceneID="Jaj-WM-rUB">
             <objects>
-                <viewController title="LoginViewController" id="oLs-2L-hdH" userLabel="Login View Controller" customClass="LoginViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginViewController" title="LoginViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="oLs-2L-hdH" userLabel="Login View Controller" customClass="LoginViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="joe-Fr-yKa"/>
                         <viewControllerLayoutGuide type="bottom" id="jmB-0c-yPV"/>
@@ -99,6 +99,7 @@
                     </view>
                     <connections>
                         <outlet property="email" destination="Egw-M7-6zH" id="nBw-Xe-IPS"/>
+                        <outlet property="errorLabel" destination="3AX-9c-uD7" id="FqA-NM-Ujh"/>
                         <outlet property="iconImage" destination="9Yo-E9-mgg" id="tai-9H-caE"/>
                         <outlet property="logInButton" destination="Pkc-Fn-mk4" id="xkZ-Cw-OUf"/>
                         <outlet property="password" destination="HeT-RC-GP4" id="huy-nW-UBb"/>
@@ -108,10 +109,10 @@
             </objects>
             <point key="canvasLocation" x="-359" y="135"/>
         </scene>
-        <!--tabBarViewController-->
+        <!--TabBarController-->
         <scene sceneID="BWe-Yw-1ma">
             <objects>
-                <tabBarController storyboardIdentifier="tabBarViewController" title="tabBarViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="HKM-CN-jXk" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarController" title="TabBarController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="HKM-CN-jXk" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="hwh-Em-vV2"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="MO5-y0-1Kv">
@@ -290,7 +291,7 @@
         <!--Navigation Controller-->
         <scene sceneID="QQw-A6-hcE">
             <objects>
-                <navigationController id="keV-k0-d4X" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="AddPinNavigationController" id="keV-k0-d4X" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="sU1-ke-5u6">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

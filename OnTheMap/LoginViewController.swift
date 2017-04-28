@@ -17,6 +17,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var iconImage: UIImageView!
     @IBOutlet weak var logInButton: UIButton!
+    @IBOutlet weak var errorLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,13 +40,12 @@ class LoginViewController: UIViewController {
     
     private func completeLogin() {
         performUIUpdatesOnMain {
-            let controller = self.storyboard!.instantiateViewController(withIdentifier: "tabBarViewController") as! UITabBarController
+            let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController") as! UITabBarController
             self.present(controller, animated: true, completion: nil)
         }
     }
     
     @IBAction func login(_ sender: Any) {
-        
         
         let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
         request.httpMethod = "POST"
@@ -57,6 +57,7 @@ class LoginViewController: UIViewController {
         let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
             guard (error == nil) else {
                 print("There was an error with your request: \(String(describing: error))")
+                self.errorLabel.text = "There was a network error. Check your connection."
                 return
             }
             let range = Range(5 ..< data!.count)
@@ -72,11 +73,13 @@ class LoginViewController: UIViewController {
             
             guard let session = parsedResult["session"] as? [String:AnyObject] else {
                 print("Could not find session in \(String(describing: parsedResult))")
+                self.errorLabel.text = "Username or Password incorrect."
                 return
             }
             
             guard let sessionId = session["id"] as? String else {
                 print("Could not find ID in \(String(describing: session))")
+                self.errorLabel.text = "Username or Password incorrect."
                 return
             }
             

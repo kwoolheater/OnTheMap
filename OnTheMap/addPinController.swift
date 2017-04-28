@@ -34,7 +34,7 @@ class AddPinController: UIViewController, MKMapViewDelegate {
         appDelegate = UIApplication.shared.delegate as! AppDelegate
         
         self.tabBarController?.tabBar.isHidden = true
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: nil, action: nil) //create action
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancel)) 
         
         let tap: UIGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(AddPinController.dismissKeyboard))
         view.addGestureRecognizer(tap)
@@ -43,9 +43,17 @@ class AddPinController: UIViewController, MKMapViewDelegate {
         finishButton.layer.cornerRadius = 5
         finishButton.isEnabled = false
         website.text = ""
+        getUserInfo()
     }
     
-    
+    func cancel() {
+        
+        performUIUpdatesOnMain {
+            let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController")
+            self.present(controller, animated: true, completion: nil)
+        }
+        
+    }
     
     func goodWebsite(text: String) -> Bool {
         //check website formatting
@@ -90,35 +98,35 @@ class AddPinController: UIViewController, MKMapViewDelegate {
     }
     
     @IBAction func post(_ sender: Any) {
-        getUserInfo()
-        
-        if appDelegate.previousLocation == true {
            
-            let urlString = "https://parse.udacity.com/parse/classes/StudentLocation/8ZExGR5uX8"
+            let urlString = "https://parse.udacity.com/parse/classes/StudentLocation"
             let url = URL(string: urlString)
             let request = NSMutableURLRequest(url: url!)
-            request.httpMethod = "PUT"
+            request.httpMethod = "POST"
             request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
             request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpBody = "{\"uniqueKey\": \(appDelegate.uniqueKey), \"firstName\": \(appDelegate.firstName), \"lastName\": \(appDelegate.lastName),\"mapString\": \(location.text), \"mediaURL\": \(website.text),\"latitude\": \(pointAnnotation.coordinate.latitude), \"longitude\": \(pointAnnotation.coordinate.longitude)}".data(using: String.Encoding.utf8)
+            request.httpBody = "{\"uniqueKey\": \"\(appDelegate.uniqueKey!)\", \"firstName\": \"\(appDelegate.firstName!)\", \"lastName\": \"\(appDelegate.lastName!)\",\"mapString\": \"\(location.text!)\", \"mediaURL\": \"\(website.text!)\",\"latitude\": \(pointAnnotation.coordinate.latitude), \"longitude\": \(pointAnnotation.coordinate.longitude)}".data(using: String.Encoding.utf8)
             let session = URLSession.shared
-            print( "{\"uniqueKey\": \(appDelegate.uniqueKey), \"firstName\": \(appDelegate.firstName), \"lastName\": \(appDelegate.lastName),\"mapString\": \(location.text), \"mediaURL\": \(website.text),\"latitude\": \(pointAnnotation.coordinate.latitude), \"longitude\": \(pointAnnotation.coordinate.longitude)}" )
+            //"{\"uniqueKey\": \"\(appDelegate.uniqueKey!)\", \"firstName\": \"\(appDelegate.firstName!)\", \"lastName\": \"\(appDelegate.lastName!)\",\"mapString\": \"\(location.text!)\", \"mediaURL\": \"\(website.text!)\",\"latitude\": \(pointAnnotation.coordinate.latitude), \"longitude\": \(pointAnnotation.coordinate.longitude)}"
+            
             let task = session.dataTask(with: request as URLRequest) { data, response, error in
                 if error != nil { // Handle error…
+                    let alert = UIAlertController(title: "", message: "There was a network error with your request.", preferredStyle: UIAlertControllerStyle.alert)
+                    self.present(alert, animated: true, completion: nil)
                     return
                 }
                 print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
+                
+                
+                self.performUIUpdatesOnMain {
+                    let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController")
+                    self.present(controller, animated: true, completion: nil)
+                }
+                
             }
             task.resume()
             
-        } else if appDelegate.previousLocation == false {
-            
-            
-            
-            
-            
-        }
     }
     
     func getUserInfo() {
@@ -126,6 +134,7 @@ class AddPinController: UIViewController, MKMapViewDelegate {
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error...
+                print("User Info Error")
                 return
             }
             let range = Range(5..<data!.count)
@@ -159,6 +168,12 @@ class AddPinController: UIViewController, MKMapViewDelegate {
         task.resume()
         
         
+    }
+    
+    func performUIUpdatesOnMain(_ updates: @escaping () -> Void) {
+        DispatchQueue.main.async {
+            updates()
+        }
     }
 }
 
