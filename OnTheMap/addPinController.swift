@@ -113,6 +113,7 @@ class AddPinController: UIViewController, MKMapViewDelegate {
             let task = session.dataTask(with: request as URLRequest) { data, response, error in
                 if error != nil { // Handle error…
                     let alert = UIAlertController(title: "", message: "There was a network error with your request.", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
                     return
                 }

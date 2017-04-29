@@ -50,6 +50,7 @@ class tableViewController: UITableViewController  {
             guard (error == nil) else {
                 print("There was an error with your request: \(String(describing: error))")
                 let alert = UIAlertController(title: "", message: "There was a network error with your request.", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 return
             }
