@@ -16,16 +16,15 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         appDelegate = UIApplication.shared.delegate as! AppDelegate
 
         loadStudentLocations()
         checkForPreviousLocation()
         navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(add)), //add action
-            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refresh)) //add action
+            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(add)),
+            UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refresh))
             ]
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logout)) //add action
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logout))
     }
     
     func performUIUpdatesOnMain(_ updates: @escaping () -> Void) {
@@ -35,23 +34,32 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        if annotation is MKUserLocation {return nil}
-        
         let reuseId = "pin"
         
         var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = true
             pinView!.animatesDrop = true
+            
             let calloutButton = UIButton(type: .detailDisclosure)
             pinView!.rightCalloutAccessoryView = calloutButton
             pinView!.sizeToFit()
+            print("success")
         } else {
             pinView!.annotation = annotation
         }
         
         return pinView
+    }
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        
+        if let annotation = view.annotation {
+            print("success")
+        }
+        
     }
     
     func loadStudentLocations() {
