@@ -21,7 +21,7 @@ class Client: NSObject {
         
         let session = self.session
         
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+        let _ = session.dataTask(with: request as URLRequest) { data, response, error in
             guard (error == nil) else {
                 print("There was an error with your request: \(String(describing: error))")
                 let alert = UIAlertController(title: "", message: "There was a network error with your request.", preferredStyle: UIAlertControllerStyle.alert)
@@ -60,7 +60,7 @@ class Client: NSObject {
                 }
             }
         }
-        task.resume()
+//        task.resume()
     }
     
     func performUIUpdatesOnMain(_ updates: @escaping () -> Void) {
