@@ -28,6 +28,15 @@ class AddPinController: UIViewController, MKMapViewDelegate {
     var pointAnnotation:MKPointAnnotation!
     var pinAnnotationView:MKPinAnnotationView!
     
+    let destinationUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        .appendingPathComponent("filteredImage.png")
+    let imagePicker = UIImagePickerController()
+    let messageFrame = UIView()
+    var activityIndicator = UIActivityIndicatorView()
+    var strLabel = UILabel()
+    
+    let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -65,12 +74,14 @@ class AddPinController: UIViewController, MKMapViewDelegate {
     }
     
     @IBAction func searchButtonClicked(_ sender: Any) {
+        
         if (goodWebsite(text: website.text!) == false) {
             let alertController = UIAlertController(title: nil, message: "Website not formatted properly", preferredStyle: UIAlertControllerStyle.alert)
             alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
             self.present(alertController, animated: true, completion: nil)
             return
         } else if (goodWebsite(text: website.text!) == true) {
+            activityIndicator("Searching")
             let request = MKLocalSearchRequest()
             request.naturalLanguageQuery = "\(location.text)"
             request.region = mapView.region
@@ -90,7 +101,9 @@ class AddPinController: UIViewController, MKMapViewDelegate {
                 self.pinAnnotationView = MKPinAnnotationView(annotation: self.pointAnnotation, reuseIdentifier: nil)
                 self.mapView.centerCoordinate = self.pointAnnotation.coordinate
                 self.mapView.addAnnotation(self.pinAnnotationView.annotation!)
-            
+                self.performUIUpdatesOnMain {
+                    self.effectView.removeFromSuperview()
+                }
                 self.finishButton.isEnabled = true
                 self.dismissKeyboard()
             }
@@ -176,6 +189,8 @@ class AddPinController: UIViewController, MKMapViewDelegate {
             updates()
         }
     }
+    
+    
 }
 
 extension AddPinController: UITextFieldDelegate {
@@ -194,5 +209,29 @@ extension AddPinController: UITextFieldDelegate {
         if btnsendtag.tag == 1 {
             //do anything here
         }
+    }
+    
+    func activityIndicator(_ title: String) {
+        
+        strLabel.removeFromSuperview()
+        activityIndicator.removeFromSuperview()
+        effectView.removeFromSuperview()
+        
+        strLabel = UILabel(frame: CGRect(x: 50, y: 0, width: 160, height: 46))
+        strLabel.text = title
+        strLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
+        strLabel.textColor = UIColor(white: 0.9, alpha: 0.7)
+        
+        effectView.frame = CGRect(x: view.frame.midX - strLabel.frame.width/2, y: view.frame.midY - strLabel.frame.height/2 , width: 160, height: 46)
+        effectView.layer.cornerRadius = 15
+        effectView.layer.masksToBounds = true
+        
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        activityIndicator.frame = CGRect(x: 0, y: 0, width: 46, height: 46)
+        activityIndicator.startAnimating()
+        
+        effectView.addSubview(activityIndicator)
+        effectView.addSubview(strLabel)
+        view.addSubview(effectView)
     }
 }
