@@ -60,6 +60,7 @@ class Client: NSObject {
                 }
             }
         }
+        task.resume()
     }
     
     func performUIUpdatesOnMain(_ updates: @escaping () -> Void) {
@@ -111,5 +112,5 @@ class Client: NSObject {
 //    }
 //    
 //}
-//task.resume()
+//
 }
