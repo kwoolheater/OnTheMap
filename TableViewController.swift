@@ -77,11 +77,16 @@ class tableViewController: UITableViewController  {
                 
                 for student in results {
                     
-                    if let firstName = student["firstName"], let lastName = student["lastName"], let mediaURL = student["mediaURL"] {
-                        
-                        self.person.append(people(firstName: firstName as! String, lastName: lastName as! String, mediaURL: mediaURL as! String))
-                        
-                    }
+                    people.personFromResults(results)
+                    
+                    
+                    
+                    
+//                    if let firstName = student["firstName"], let lastName = student["lastName"], let mediaURL = student["mediaURL"] {
+//                        
+//                        self.person.append(people(firstName: firstName as! String, lastName: lastName as! String, mediaURL: mediaURL as! String))
+//                        
+//                    }
                 }
                 }
             }
