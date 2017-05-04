@@ -13,47 +13,113 @@ class Client: NSObject {
     
     var session = URLSession.shared
     
-    
-    
-    /*func taskForPosting (_ method: String, completionHandlerForPOST: @escaping () -> Void) -> URLSessionDataTask {
+    private func loadStudentLocations(completionHandlerForSession: @escaping (_ success: Bool, _ sessionID: String?, _ errorString: String?) -> Void) {
         
-        let request = NSMutableURLRequest(url: method)
-        request.httpMethod = "POST"
-        //add values is different
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation?limit=200&skip=10&order=-updatedAt")!)
+        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         
-        let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
+        let session = self.session
+        
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
             guard (error == nil) else {
                 print("There was an error with your request: \(String(describing: error))")
+                let alert = UIAlertController(title: "", message: "There was a network error with your request.", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }
-            let range = Range(5 ..< data!.count)
-            let newData = data?.subdata(in: range) /* subset response data! */
             
             let parsedResult: [String:AnyObject]!
             do {
-                parsedResult = try JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as! [String:AnyObject]
+                parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
             } catch {
-                print("Could not parse the data as JSON: '\(String(describing: newData))'")
+                print("Could not parse the data as JSON: '\(String(describing: data))'")
                 return
             }
             
-            guard let session = parsedResult["session"] as? [String:AnyObject] else {
-                print("Could not find session in \(String(describing: parsedResult["session"]))")
-                return
-            }
+            var results: [[String:AnyObject]]
             
-            guard let sessionId = session["id"] as? String else {
-                print("Could not find ID in \(String(describing: session["id"]))")
-                return
-            }
-            self.appDelegate.sessionID = sessionId
-            self.completeLogin()
+            for (key ,value) in parsedResult {
+                
+                if key == "error" {
+                    let alert = UIAlertController(title: "", message: "There was a server error with your request.", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+                    present(alert, animated: true, completion: nil)
+                    return
+                } else {
+                    
+                    results = value as! [[String:AnyObject]]
+                    
+                    for student in results {
+                        if let latitude = student["latitude"], let longitude = student["longitude"], let firstName = student["firstName"],let lastName = student["lastName"], let mediaURL = student["mediaURL"] {
+                            
+                        }
+                    }
+    
+    
+    }
+    
+    func performUIUpdatesOnMain(_ updates: @escaping () -> Void) {
+        DispatchQueue.main.async {
+            updates()
         }
-        task.resume()
+    }
+}
+
+
+let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation?limit=200&skip=10&order=-updatedAt")!)
+request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+
+let session = URLSession.shared
+let task = session.dataTask(with: request as URLRequest) { data, response, error in
+    guard (error == nil) else {
+        print("There was an error with your request: \(String(describing: error))")
+        let alert = UIAlertController(title: "", message: "There was a network error with your request.", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        return
+    }
+    
+    let parsedResult: [String:AnyObject]!
+    do {
+        parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
+    } catch {
+        print("Could not parse the data as JSON: '\(String(describing: data))'")
+        return
+    }
+    
+    var results: [[String:AnyObject]]
+    
+    for (key ,value) in parsedResult {
         
-        return task
-    }*/
+        if key == "error" {
+            let alert = UIAlertController(title: "", message: "There was a server error with your request.", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        } else {
+            
+            results = value as! [[String:AnyObject]]
+            
+            for student in results {
+                
+//                if let latitude = student["latitude"], let longitude = student["longitude"], let firstName = student["firstName"],let lastName = student["lastName"], let mediaURL = student["mediaURL"] {
+//                    let coord: MKPointAnnotation = MKPointAnnotation()
+//                    coord.coordinate = CLLocationCoordinate2D(latitude: latitude as! CLLocationDegrees, longitude: longitude as! CLLocationDegrees)
+//                    coord.title = ("\(firstName) \(lastName)")
+//                    coord.subtitle = ("\(mediaURL)")
+//                    DispatchQueue.main.async(execute: {
+//                        self.mapView.addAnnotation(coord)
+//                    })
+//                } else {
+//                    print("fail")
+//                }
+//            }
+//        
+            }
+    }
     
 }
+task.resume()

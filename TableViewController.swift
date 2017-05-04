@@ -42,7 +42,7 @@ class tableViewController: UITableViewController  {
     
     func loadStudentLocations() {
         // fill array of people with data
-        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
+        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation?limit=200&skip=10&order=-updatedAt")!)
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         let session = URLSession.shared
@@ -64,7 +64,14 @@ class tableViewController: UITableViewController  {
             }
             
             var results: [[String:AnyObject]]
-            for (_,value) in parsedResult {
+            for (key ,value) in parsedResult {
+                
+                if key == "error" {
+                    let alert = UIAlertController(title: "", message: "There was a server error with your request.", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    return
+                } else {
                 
                 results = value as! [[String:AnyObject]]
                 
@@ -75,6 +82,7 @@ class tableViewController: UITableViewController  {
                         self.person.append(people(firstName: firstName as! String, lastName: lastName as! String, mediaURL: mediaURL as! String))
                         
                     }
+                }
                 }
             }
             self.performUIUpdatesOnMain {
@@ -121,9 +129,10 @@ class tableViewController: UITableViewController  {
         appDelegate.firstName = nil
         appDelegate.lastName = nil
         appDelegate.previousLocation = false
-        //push to login controller
-        let controller = self.storyboard!.instantiateViewController(withIdentifier: "LoginViewController")
-        self.present(controller, animated: true, completion: nil)
+        
+        //dismiss current view controller
+        navigationController?.popViewController(animated: true)
+        dismiss(animated: true, completion: nil)
     }
     
     func refresh() {

@@ -57,7 +57,9 @@ class LoginViewController: UIViewController {
         let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
             guard (error == nil) else {
                 print("There was an error with your request: \(String(describing: error))")
-                self.errorLabel.text = "There was a network error. Check your connection."
+                let alert = UIAlertController(title: "", message: "There was a network error. Check your connection.", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }
             let range = Range(5 ..< data!.count)
@@ -73,13 +75,17 @@ class LoginViewController: UIViewController {
             
             guard let session = parsedResult["session"] as? [String:AnyObject] else {
                 print("Could not find session in \(String(describing: parsedResult))")
-                self.errorLabel.text = "Username or Password incorrect."
+                let alert = UIAlertController(title: "", message: "Username or Password incorrect.", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }
             
             guard let sessionId = session["id"] as? String else {
                 print("Could not find ID in \(String(describing: session))")
-                self.errorLabel.text = "Username or Password incorrect."
+                let alert = UIAlertController(title: "", message: "Username or Password incorrect.", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }
             
@@ -92,7 +98,6 @@ class LoginViewController: UIViewController {
                 print("Could not find key in \(String(describing: account))")
                 return
             }
-            
             
             self.appDelegate.uniqueKey = uniqueKey
             self.appDelegate.sessionID = sessionId

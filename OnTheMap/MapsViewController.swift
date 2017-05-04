@@ -46,7 +46,6 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
             let calloutButton = UIButton(type: .detailDisclosure)
             pinView!.rightCalloutAccessoryView = calloutButton
             pinView!.sizeToFit()
-            print("success")
         } else {
             pinView!.annotation = annotation
         }
@@ -57,15 +56,18 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         
         if let annotation = view.annotation {
-            print("success")
+            if let url = URL(string: annotation.subtitle!!) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
         }
         
     }
     
     func loadStudentLocations() {
-        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
+        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation?limit=200&skip=10&order=-updatedAt")!)
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             guard (error == nil) else {
@@ -85,8 +87,16 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
             }
             
             var results: [[String:AnyObject]]
-            for (_,value) in parsedResult {
             
+            for (key ,value) in parsedResult {
+                
+                if key == "error" {
+                    let alert = UIAlertController(title: "", message: "There was a server error with your request.", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    return
+                } else {
+                
                 results = value as! [[String:AnyObject]]
                 
                 for student in results {
@@ -103,20 +113,11 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
                         print("fail")
                     }
                 }
+                }
             }
             
         }
         task.resume()
-    }
-    
-    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        
-        if let annotation = view.annotation {
-            if let url = URL(string: annotation.subtitle!!) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            }
-        }
-        
     }
     
     func logout() {
@@ -126,9 +127,10 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
         appDelegate.firstName = nil
         appDelegate.lastName = nil
         appDelegate.previousLocation = false
-        //push to login controller
-        let controller = self.storyboard!.instantiateViewController(withIdentifier: "LoginViewController")
-        self.present(controller, animated: true, completion: nil)
+        
+        //dismiss current view controller
+        navigationController?.popViewController(animated: true)
+        dismiss(animated: true, completion: nil)
     }
     
     func refresh() {
