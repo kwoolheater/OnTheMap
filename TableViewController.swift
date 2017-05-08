@@ -8,7 +8,7 @@
 
 import UIKit
 
-class tableViewController: UITableViewController  {
+class tableViewController: UITableViewController {
 
     var appDelegate: AppDelegate!
     var person = [people]()
@@ -77,10 +77,7 @@ class tableViewController: UITableViewController  {
                 
                 for student in results {
                     
-                    people.personFromResults(results)
-                    
-                    
-                    
+                    self.person = people.personFromResults(results)
                     
 //                    if let firstName = student["firstName"], let lastName = student["lastName"], let mediaURL = student["mediaURL"] {
 //                        

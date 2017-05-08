@@ -75,6 +75,8 @@ struct people {
         for result in results {
             peoples.append(people(dictionary: result))
         }
+        
+        print(peoples.count)
         return peoples
     }
 }
