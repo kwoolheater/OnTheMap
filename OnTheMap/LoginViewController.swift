@@ -98,9 +98,8 @@ class LoginViewController: UIViewController {
                 print("Could not find key in \(String(describing: account))")
                 return
             }
-            
-            self.appDelegate.uniqueKey = uniqueKey
-            self.appDelegate.sessionID = sessionId
+            SavedItems.sharedInstance().uniqueKey = uniqueKey
+            SavedItems.sharedInstance().sessionID = sessionId
             self.completeLogin()
         }
         task.resume()

@@ -12,6 +12,7 @@ import UIKit
 class Client: NSObject {
     
     var session = URLSession.shared
+    var appDelegate: AppDelegate!
     
     func loadStudentLocations(completionHandlerForLocation: @escaping (_ success: Bool, _ error: NSError?) -> Void) -> URLSessionDataTask {
         
@@ -59,6 +60,50 @@ class Client: NSObject {
         }
         task.resume()
         
+        return task
+    }
+    
+    func checkForPreviousLocation(completionHandlerForPrevLocation: @escaping (_ success: Bool, _ previousLocation: Bool, _ error: NSError?) -> Void) -> URLSessionDataTask {
+        let uniqueKey = SavedItems.sharedInstance().uniqueKey!
+        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation?where=%7B%22uniqueKey%22%3A%22\(uniqueKey)%22%7D"
+        let url = URL(string: urlString)
+        let request = NSMutableURLRequest(url: url!)
+        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        let session = URLSession.shared
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+            if error != nil { // Handle error
+                completionHandlerForPrevLocation(false, false, error as! NSError)
+                return
+            }
+            
+            let parsedResult: [String:AnyObject]!
+            do {
+                parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
+            } catch {
+                print("Could not parse the data as JSON: '\(String(describing: data))'")
+                return
+            }
+            
+            var results: [[String:AnyObject]]
+            
+            for (_,value) in parsedResult {
+                
+                results = value as! [[String:AnyObject]]
+                
+                for student in results {
+                    
+                    guard student["createdAt"] != nil else {
+                        completionHandlerForPrevLocation(true, false, nil)
+                        return
+                    }
+                    
+                    completionHandlerForPrevLocation(true, true, nil)
+                }
+            }
+        }
+        
+        task.resume()
         return task
     }
     

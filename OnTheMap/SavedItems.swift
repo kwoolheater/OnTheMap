@@ -20,4 +20,10 @@ class SavedItems: NSObject {
     var array = [people]()
     var annotations = [MKPointAnnotation]()
     
+    var sessionID: String? = nil
+    var uniqueKey: String? = nil
+    var firstName: String? = nil
+    var lastName: String? = nil
+    var previousLocation: Bool? = false
+    
 }

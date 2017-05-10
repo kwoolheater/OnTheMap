@@ -128,45 +128,12 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
     
     func checkForPreviousLocation() {
         
-        let uniqueKey = appDelegate.uniqueKey!
-        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation?where=%7B%22uniqueKey%22%3A%22\(uniqueKey)%22%7D"
-        let url = URL(string: urlString)
-        let request = NSMutableURLRequest(url: url!)
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            if error != nil { // Handle error
-                print("Previous Location Error!")
-                return
-            }
-            
-            let parsedResult: [String:AnyObject]!
-            do {
-                parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
-            } catch {
-                print("Could not parse the data as JSON: '\(String(describing: data))'")
-                return
-            }
-            
-            var results: [[String:AnyObject]]
-            for (_,value) in parsedResult {
-                
-                results = value as! [[String:AnyObject]]
-                
-                for student in results {
-                    
-                    guard student["createdAt"] != nil else {
-                        self.previousLocation = false
-                        return
-                    }
-                    
-                    self.previousLocation = true
-                    self.appDelegate.previousLocation = true
-                }
+        Client.sharedInstance().checkForPreviousLocation { (success, prevLocation, error) in
+            if success {
+                self.previousLocation = prevLocation
+                self.appDelegate.previousLocation = prevLocation
             }
         }
-        task.resume()
     }
     
 }
