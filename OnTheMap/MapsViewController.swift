@@ -13,6 +13,7 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
 
     var appDelegate: AppDelegate!
     var person = [people]()
+    var annotations = [MKPointAnnotation]()
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
@@ -98,16 +99,15 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
                     return
                 } else {
                 
-                results = value as! [[String:AnyObject]]
-                
-                for student in results {
+                    results = value as! [[String:AnyObject]]
                     
-//                    self.person = people.annotationsFromPeopleStruct(student)
-//                    
-//                    DispatchQueue.main.async(execute: {
-//                        self.mapView.addAnnotation(person.annotations)
-//                    })
-                }
+                    self.person = people.personFromResults(results)
+                    self.annotations = people.annotationsFromPeopleStruct(self.person)
+                    
+                    DispatchQueue.main.async(execute: {
+                        self.mapView.addAnnotations(self.annotations as [MKAnnotation])
+                    })
+                    
                 }
             }
             
