@@ -79,4 +79,21 @@ struct people {
         print(peoples.count)
         return peoples
     }
+    
+    static func annotationsFromPeopleStruct(_ person: [people]) -> [MKPointAnnotation] {
+        
+        var annotations = [MKPointAnnotation]()
+        
+        for student in person {
+            
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = CLLocationCoordinate2D(latitude: student.latitude, longitude: student.longitude)
+            annotation.title = "\(student.firstName) \(student.lastName)"
+            annotation.subtitle = student.mediaURL
+            
+            annotations.append(annotation)
+        }
+        
+        return annotations
+    }
 }

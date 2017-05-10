@@ -12,6 +12,7 @@ import MapKit
 class MapsViewController: UIViewController, MKMapViewDelegate {
 
     var appDelegate: AppDelegate!
+    var person = [people]()
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
@@ -101,17 +102,11 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
                 
                 for student in results {
                     
-                    if let latitude = student["latitude"], let longitude = student["longitude"], let firstName = student["firstName"],let lastName = student["lastName"], let mediaURL = student["mediaURL"] {
-                        let coord: MKPointAnnotation = MKPointAnnotation()
-                        coord.coordinate = CLLocationCoordinate2D(latitude: latitude as! CLLocationDegrees, longitude: longitude as! CLLocationDegrees)
-                        coord.title = ("\(firstName) \(lastName)")
-                        coord.subtitle = ("\(mediaURL)")
-                        DispatchQueue.main.async(execute: {
-                            self.mapView.addAnnotation(coord)
-                        })
-                    } else {
-                        print("fail")
-                    }
+//                    self.person = people.annotationsFromPeopleStruct(student)
+//                    
+//                    DispatchQueue.main.async(execute: {
+//                        self.mapView.addAnnotation(person.annotations)
+//                    })
                 }
                 }
             }
