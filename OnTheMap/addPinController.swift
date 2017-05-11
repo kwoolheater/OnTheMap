@@ -18,29 +18,13 @@ class AddPinController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var finishButton: UIButton!
     @IBOutlet weak var searchButton: UIButton!
     
-    var appDelegate: AppDelegate!
     var keyboardOnScreen = false
-    var annotation:MKAnnotation!
-    var localSearchRequest:MKLocalSearchRequest!
-    var localSearch:MKLocalSearch!
-    var localSearchResponse:MKLocalSearchResponse!
-    var error:NSError!
-    var pointAnnotation:MKPointAnnotation!
-    var pinAnnotationView:MKPinAnnotationView!
-    
-    let destinationUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        .appendingPathComponent("filteredImage.png")
-    let imagePicker = UIImagePickerController()
-    let messageFrame = UIView()
+    var lat = CLLocationDegrees()
+    var lon = CLLocationDegrees()
     var activityIndicator = UIActivityIndicatorView()
-    var strLabel = UILabel()
-    
-    let effectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        appDelegate = UIApplication.shared.delegate as! AppDelegate
         
         self.tabBarController?.tabBar.isHidden = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancel)) 
@@ -53,6 +37,7 @@ class AddPinController: UIViewController, MKMapViewDelegate {
         finishButton.isEnabled = false
         website.text = ""
         getUserInfo()
+        
     }
     
     func cancel() {
@@ -81,107 +66,44 @@ class AddPinController: UIViewController, MKMapViewDelegate {
             self.present(alertController, animated: true, completion: nil)
             return
         } else if (goodWebsite(text: website.text!) == true) {
-            activityIndicator("Searching")
-            let request = MKLocalSearchRequest()
-            request.naturalLanguageQuery = "\(location.text)"
-            request.region = mapView.region
+            self.activityIndicator.startAnimating()
             
-            let search = MKLocalSearch(request: request)
-            search.start { response, error -> Void in
-                if response == nil {
-                    let alertController = UIAlertController(title: nil, message: "Place Not Found", preferredStyle: UIAlertControllerStyle.alert)
-                    alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
-                    self.present(alertController, animated: true, completion: nil)
-                    return
-                }
+            let geoCode = CLGeocoder()
+            geoCode.geocodeAddressString(location.text!) { (placemarks, error) in
                 
-                self.pointAnnotation = MKPointAnnotation()
-                self.pointAnnotation.coordinate = CLLocationCoordinate2D(latitude: response!.boundingRegion.center.latitude, longitude: response!.boundingRegion.center.longitude)
-            
-                self.pinAnnotationView = MKPinAnnotationView(annotation: self.pointAnnotation, reuseIdentifier: nil)
-                self.mapView.centerCoordinate = self.pointAnnotation.coordinate
-                self.mapView.addAnnotation(self.pinAnnotationView.annotation!)
-                self.performUIUpdatesOnMain {
-                    self.effectView.removeFromSuperview()
+                if let placemark = placemarks?[0] {
+                    self.lat = (placemark.location?.coordinate.latitude)!
+                    self.lon = (placemark.location?.coordinate.longitude)!
+                    self.mapView.showAnnotations([MKPlacemark(placemark: placemark)], animated: true)
+                    
+                    self.activityIndicator.stopAnimating()
+                    self.finishButton.isEnabled = true
+                    
+                } else if error != nil {
+                    self.activityIndicator.stopAnimating()
+                    print(error)
                 }
-                self.finishButton.isEnabled = true
-                self.dismissKeyboard()
             }
         }
     }
     
     @IBAction func post(_ sender: Any) {
-           
-            let urlString = "https://parse.udacity.com/parse/classes/StudentLocation"
-            let url = URL(string: urlString)
-            let request = NSMutableURLRequest(url: url!)
-            request.httpMethod = "POST"
-            request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-            request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpBody = "{\"uniqueKey\": \"\(appDelegate.uniqueKey!)\", \"firstName\": \"\(appDelegate.firstName!)\", \"lastName\": \"\(appDelegate.lastName!)\",\"mapString\": \"\(location.text!)\", \"mediaURL\": \"\(website.text!)\",\"latitude\": \(pointAnnotation.coordinate.latitude), \"longitude\": \(pointAnnotation.coordinate.longitude)}".data(using: String.Encoding.utf8)
-            let session = URLSession.shared
-            //"{\"uniqueKey\": \"\(appDelegate.uniqueKey!)\", \"firstName\": \"\(appDelegate.firstName!)\", \"lastName\": \"\(appDelegate.lastName!)\",\"mapString\": \"\(location.text!)\", \"mediaURL\": \"\(website.text!)\",\"latitude\": \(pointAnnotation.coordinate.latitude), \"longitude\": \(pointAnnotation.coordinate.longitude)}"
-            
-            let task = session.dataTask(with: request as URLRequest) { data, response, error in
-                if error != nil { // Handle error…
-                    let alert = UIAlertController(title: "", message: "There was a network error with your request.", preferredStyle: UIAlertControllerStyle.alert)
-                    alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                    return
-                }
-                print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
-                
-                
+        
+        Client.sharedInstance().postNewLocation(location: location.text!, website: website.text!, latitude: lat as Double, longitude: lon as Double) { (success, error) in
+            if success {
                 self.performUIUpdatesOnMain {
                     let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController")
                     self.present(controller, animated: true, completion: nil)
                 }
-                
             }
-            task.resume()
-            
+        }
     }
     
     func getUserInfo() {
-        let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/users/\(appDelegate.uniqueKey!)")!)
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            if error != nil { // Handle error...
-                print("User Info Error")
-                return
-            }
-            let range = Range(5..<data!.count)
-            let newData = data?.subdata(in: range) /* subset response data! */
-            let parsedResult: [String:AnyObject]!
-            do {
-                parsedResult = try JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as! [String:AnyObject]
-            } catch {
-                print("Could not parse the data as JSON: '\(String(describing: newData))'")
-                return
-            }
+        
+        Client.sharedInstance().getUserInfo() { (success, error) in
             
-            guard let user = parsedResult["user"] as? [String: AnyObject] else {
-                print("Can't find user in \(parsedResult)")
-                return
-            }
-            
-            guard let firstName = user["first_name"] as? String else {
-                print("Can't find firstName in \(user)")
-                return
-            }
-            
-            guard let lastName = user["last_name"] as? String else {
-                print("Can't find lastName in \(user)")
-                return
-            }
-
-            self.appDelegate.firstName = firstName
-            self.appDelegate.lastName = lastName
         }
-        task.resume()
-        
-        
     }
     
     func performUIUpdatesOnMain(_ updates: @escaping () -> Void) {
@@ -209,29 +131,5 @@ extension AddPinController: UITextFieldDelegate {
         if btnsendtag.tag == 1 {
             //do anything here
         }
-    }
-    
-    func activityIndicator(_ title: String) {
-        
-        strLabel.removeFromSuperview()
-        activityIndicator.removeFromSuperview()
-        effectView.removeFromSuperview()
-        
-        strLabel = UILabel(frame: CGRect(x: 50, y: 0, width: 160, height: 46))
-        strLabel.text = title
-        strLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightMedium)
-        strLabel.textColor = UIColor(white: 0.9, alpha: 0.7)
-        
-        effectView.frame = CGRect(x: view.frame.midX - strLabel.frame.width/2, y: view.frame.midY - strLabel.frame.height/2 , width: 160, height: 46)
-        effectView.layer.cornerRadius = 15
-        effectView.layer.masksToBounds = true
-        
-        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
-        activityIndicator.frame = CGRect(x: 0, y: 0, width: 46, height: 46)
-        activityIndicator.startAnimating()
-        
-        effectView.addSubview(activityIndicator)
-        effectView.addSubview(strLabel)
-        view.addSubview(effectView)
     }
 }

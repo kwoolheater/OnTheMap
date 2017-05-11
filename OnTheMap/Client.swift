@@ -12,7 +12,6 @@ import UIKit
 class Client: NSObject {
     
     var session = URLSession.shared
-    var appDelegate: AppDelegate!
     
     func login(email: String, password: String, completionHandlerForLogin: @escaping (_ success: Bool, _ error: NSError?) -> Void) -> URLSessionDataTask {
         
@@ -106,9 +105,6 @@ class Client: NSObject {
             for (key ,value) in parsedResult {
                 
                 if key == "error" {
-//                    let alert = UIAlertController(title: "", message: "There was a server error with your request.", preferredStyle: UIAlertControllerStyle.alert)
-//                    alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
-//                    self.present(alert, animated: true, completion: nil)
                     let userInfo = [NSLocalizedDescriptionKey: "Student locations not available"]
                     completionHandlerForLocation(false, NSError(domain: "Location Download", code: 1, userInfo: userInfo))
                     return
@@ -123,7 +119,6 @@ class Client: NSObject {
             }
         }
         task.resume()
-        
         return task
     }
     
@@ -171,7 +166,7 @@ class Client: NSObject {
         return task
     }
     
-    func postNewLocation (completionHandlerForPost: @escaping(_ success: Bool, _ error: NSError?) -> Void) -> URLSessionDataTask {
+    func postNewLocation(location: String, website: String, latitude: Double, longitude: Double, completionHandlerForPost: @escaping(_ success: Bool, _ error: NSError?) -> Void) -> URLSessionDataTask {
         
         let urlString = "https://parse.udacity.com/parse/classes/StudentLocation"
         let url = URL(string: urlString)
@@ -180,26 +175,64 @@ class Client: NSObject {
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "{\"uniqueKey\": \"\(appDelegate.uniqueKey!)\", \"firstName\": \"\(appDelegate.firstName!)\", \"lastName\": \"\(appDelegate.lastName!)\",\"mapString\": \"\(location.text!)\", \"mediaURL\": \"\(website.text!)\",\"latitude\": \(self.lat), \"longitude\": \(self.lon)}".data(using: String.Encoding.utf8)
+        request.httpBody = "{\"uniqueKey\": \"\(SavedItems.sharedInstance().uniqueKey!)\", \"firstName\": \"\(SavedItems.sharedInstance().firstName!)\", \"lastName\": \"\(SavedItems.sharedInstance().lastName!)\",\"mapString\": \"\(location)\", \"mediaURL\": \"\(website)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: String.Encoding.utf8)
         let session = URLSession.shared
         //"{\"uniqueKey\": \"\(appDelegate.uniqueKey!)\", \"firstName\": \"\(appDelegate.firstName!)\", \"lastName\": \"\(appDelegate.lastName!)\",\"mapString\": \"\(location.text!)\", \"mediaURL\": \"\(website.text!)\",\"latitude\": \(pointAnnotation.coordinate.latitude), \"longitude\": \(pointAnnotation.coordinate.longitude)}"
         
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error…
-                
+                completionHandlerForPost(false, error as! NSError)
                 return
             }
             print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
-            
-            self.performUIUpdatesOnMain {
-                let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController")
-                self.present(controller, animated: true, completion: nil)
-            }
+            completionHandlerForPost(true, nil)
         }
         
         task.resume()
         return task
     }
+    
+    func getUserInfo(completionHandlerForGetUserInfo: @escaping(_ success: Bool, _ error: NSError?) -> Void) -> URLSessionDataTask{
+        let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/users/\(SavedItems.sharedInstance().uniqueKey!)")!)
+        let session = URLSession.shared
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+            if error != nil { // Handle error...
+                completionHandlerForGetUserInfo(false, error as! NSError)
+                return
+            }
+            let range = Range(5..<data!.count)
+            let newData = data?.subdata(in: range) /* subset response data! */
+            let parsedResult: [String:AnyObject]!
+            do {
+                parsedResult = try JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as! [String:AnyObject]
+            } catch {
+                print("Could not parse the data as JSON: '\(String(describing: newData))'")
+                return
+            }
+            
+            guard let user = parsedResult["user"] as? [String: AnyObject] else {
+                print("Can't find user in \(parsedResult)")
+                return
+            }
+            
+            guard let firstName = user["first_name"] as? String else {
+                print("Can't find firstName in \(user)")
+                return
+            }
+            
+            guard let lastName = user["last_name"] as? String else {
+                print("Can't find lastName in \(user)")
+                return
+            }
+            
+            SavedItems.sharedInstance().firstName = firstName
+            SavedItems.sharedInstance().lastName = lastName
+            completionHandlerForGetUserInfo(true, nil)
+        }
+        task.resume()
+        return task
+    }
+    
     
     func performUIUpdatesOnMain(_ updates: @escaping () -> Void) {
         DispatchQueue.main.async {
