@@ -266,17 +266,24 @@
                                     <constraint firstItem="8Pe-Lv-8Oq" firstAttribute="leading" secondItem="Qcu-pu-itx" secondAttribute="leading" constant="16" id="xsB-k3-buW"/>
                                 </constraints>
                             </stackView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="oK3-S7-XwP">
+                                <rect key="frame" x="16" y="424" width="343" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="oK3-S7-XwP" firstAttribute="top" secondItem="viq-B6-Axe" secondAttribute="bottom" constant="360" id="LvF-Kq-mCq"/>
                             <constraint firstItem="Qcu-pu-itx" firstAttribute="top" secondItem="viq-B6-Axe" secondAttribute="bottom" constant="50" id="Ovr-de-sqg"/>
                             <constraint firstItem="Qcu-pu-itx" firstAttribute="leading" secondItem="3ZH-ZL-Ctm" secondAttribute="leading" id="Tbt-kv-2EQ"/>
                             <constraint firstAttribute="trailing" secondItem="Qcu-pu-itx" secondAttribute="trailing" id="VkT-r3-sMS"/>
                             <constraint firstAttribute="bottom" secondItem="Qcu-pu-itx" secondAttribute="bottom" constant="8" id="W6C-UX-KZG"/>
+                            <constraint firstItem="oK3-S7-XwP" firstAttribute="leading" secondItem="3ZH-ZL-Ctm" secondAttribute="leadingMargin" id="db3-kH-uA2"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="oK3-S7-XwP" secondAttribute="trailing" id="umG-NG-sKi"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="V3L-A2-UnP"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="oK3-S7-XwP" id="IzN-ex-oat"/>
                         <outlet property="finishButton" destination="mte-T0-ACA" id="ioM-2q-PaX"/>
                         <outlet property="location" destination="89e-gn-aOJ" id="xCK-BP-5Pt"/>
                         <outlet property="mapView" destination="v19-Q1-SPm" id="H6z-X5-gAN"/>
