@@ -24,9 +24,6 @@ class Client: NSObject {
         let task = session.dataTask(with: request as URLRequest) { (data, response, error) in
             guard (error == nil) else {
                 print("There was an error with your request: \(String(describing: error))")
-//                let alert = UIAlertController(title: "", message: "There was a network error. Check your connection.", preferredStyle: UIAlertControllerStyle.alert)
-//                alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
-//                self.present(alert, animated: true, completion: nil)
                 let userInfo = [NSLocalizedDescriptionKey : "There was a network error. Check your connection."]
                 completionHandlerForLogin(false, NSError(domain: "taskForPostorPut", code: 1, userInfo: userInfo))
                 return
@@ -76,7 +73,7 @@ class Client: NSObject {
     
     func loadStudentLocations(completionHandlerForLocation: @escaping (_ success: Bool, _ error: NSError?) -> Void) -> URLSessionDataTask {
         
-        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation?limit=100&skip=10&order=-updatedAt")!)
+        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation?limit=100&order=-updatedAt")!)
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         
@@ -218,11 +215,10 @@ class Client: NSObject {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = "{\"uniqueKey\": \"\(SavedItems.sharedInstance().uniqueKey!)\", \"firstName\": \"\(SavedItems.sharedInstance().firstName!)\", \"lastName\": \"\(SavedItems.sharedInstance().lastName!)\",\"mapString\": \"\(location)\", \"mediaURL\": \"\(website)\",\"latitude\": \(latitude), \"longitude\": \(longitude)}".data(using: String.Encoding.utf8)
         let session = URLSession.shared
-        //"{\"uniqueKey\": \"\(appDelegate.uniqueKey!)\", \"firstName\": \"\(appDelegate.firstName!)\", \"lastName\": \"\(appDelegate.lastName!)\",\"mapString\": \"\(location.text!)\", \"mediaURL\": \"\(website.text!)\",\"latitude\": \(pointAnnotation.coordinate.latitude), \"longitude\": \(pointAnnotation.coordinate.longitude)}"
         
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error…
-                let userInfo = [NSLocalizedDescriptionKey : error]
+                let userInfo = [NSLocalizedDescriptionKey : "Post Failed. Try again."]
                 completionHandlerForPost(false, NSError(domain: "taskForPostorPut", code: 1, userInfo: userInfo))
                 return
             }

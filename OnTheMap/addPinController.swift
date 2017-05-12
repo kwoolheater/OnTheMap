@@ -61,9 +61,7 @@ class AddPinController: UIViewController, MKMapViewDelegate {
     @IBAction func searchButtonClicked(_ sender: Any) {
         
         if (goodWebsite(text: website.text!) == false) {
-            let alertController = UIAlertController(title: nil, message: "Website not formatted properly", preferredStyle: UIAlertControllerStyle.alert)
-            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
-            self.present(alertController, animated: true, completion: nil)
+            self.showAlert(title: "Website not formatted properly.")
             return
         } else if (goodWebsite(text: website.text!) == true) {
             self.activityIndicator.startAnimating()
@@ -81,6 +79,7 @@ class AddPinController: UIViewController, MKMapViewDelegate {
                     
                 } else if error != nil {
                     self.activityIndicator.stopAnimating()
+                    self.showAlert(title: "Geocoding failed.")
                     print(error)
                 }
             }
