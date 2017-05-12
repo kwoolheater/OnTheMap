@@ -10,7 +10,6 @@ import UIKit
 
 class tableViewController: UITableViewController {
 
-    var person = [people]()
     var clearTable = false
     
     @IBOutlet var peopleTableView: UITableView!
@@ -34,7 +33,6 @@ class tableViewController: UITableViewController {
         Client.sharedInstance().loadStudentLocations { (success, error) in
             self.performUIUpdatesOnMain {
                 if success {
-                    self.person = SavedItems.sharedInstance().array
                     self.tableView.reloadData()
                 } else {
                     self.showAlert(title: (error?.localizedDescription)!)
@@ -46,7 +44,7 @@ class tableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let CellReuseId = "personCell"
-        let person = self.person[(indexPath as NSIndexPath).row]
+        let person = SavedItems.sharedInstance().array[(indexPath as NSIndexPath).row]
         let cell = tableView.dequeueReusableCell(withIdentifier: CellReuseId) as UITableViewCell!
         
         cell?.imageView?.image = #imageLiteral(resourceName: "tableImage")
@@ -62,12 +60,12 @@ class tableViewController: UITableViewController {
         if clearTable {
             return 0
         } else {
-            return person.count
+            return SavedItems.sharedInstance().array.count
         }
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let person = self.person[(indexPath as NSIndexPath).row]
+        let person = SavedItems.sharedInstance().array[(indexPath as NSIndexPath).row]
         if let url = URL(string: person.mediaURL) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }

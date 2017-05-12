@@ -11,8 +11,6 @@ import MapKit
 
 class MapsViewController: UIViewController, MKMapViewDelegate {
 
-    var person = [people]()
-    var annotations = [MKPointAnnotation]()
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
