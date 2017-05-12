@@ -85,7 +85,7 @@ class Client: NSObject {
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             guard (error == nil) else {
                 print("There was an error with your request: \(String(describing: error))")
-                let userInfo = [NSLocalizedDescriptionKey : error]
+                let userInfo = [NSLocalizedDescriptionKey: "There was a network error. Check your connection."]
                 completionHandlerForLocation(false, NSError(domain: "taskForPostorPut", code: 1, userInfo: userInfo))
                 return
             }
