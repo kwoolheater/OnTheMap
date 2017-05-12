@@ -70,14 +70,12 @@ extension LoginViewController: UITextFieldDelegate {
     
     func keyboardWillShow(_ notification: Notification) {
         if !keyboardOnScreen {
-            view.frame.origin.y -= keyboardHeight(notification)
             iconImage.isHidden = true
         }
     }
     
     func keyboardWillHide(_ notification: Notification) {
         if keyboardOnScreen {
-            view.frame.origin.y += keyboardHeight(notification)
             iconImage.isHidden = false
         }
     }
