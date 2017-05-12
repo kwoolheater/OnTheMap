@@ -10,7 +10,6 @@ import UIKit
 
 class tableViewController: UITableViewController {
 
-    var appDelegate: AppDelegate!
     var person = [people]()
     var clearTable = false
     
@@ -19,7 +18,6 @@ class tableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        appDelegate = UIApplication.shared.delegate as! AppDelegate
         
         navigationItem.rightBarButtonItems = [
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(add)),
@@ -32,18 +30,14 @@ class tableViewController: UITableViewController {
         
     }
     
-    func performUIUpdatesOnMain(_ updates: @escaping () -> Void) {
-        DispatchQueue.main.async {
-            updates()
-        }
-    }
-    
     func loadStudentLocations() {
         Client.sharedInstance().loadStudentLocations { (success, error) in
-            if success {
-                self.performUIUpdatesOnMain {
+            self.performUIUpdatesOnMain {
+                if success {
                     self.person = SavedItems.sharedInstance().array
                     self.tableView.reloadData()
+                } else {
+                    self.showAlert(title: (error?.localizedDescription)!)
                 }
             }
         }
@@ -81,11 +75,11 @@ class tableViewController: UITableViewController {
     
     func logout() {
         //reset constants
-        appDelegate.sessionID = nil
-        appDelegate.uniqueKey = nil
-        appDelegate.firstName = nil
-        appDelegate.lastName = nil
-        appDelegate.previousLocation = false
+        SavedItems.sharedInstance().sessionID = nil
+        SavedItems.sharedInstance().uniqueKey = nil
+        SavedItems.sharedInstance().firstName = nil
+        SavedItems.sharedInstance().lastName = nil
+        SavedItems.sharedInstance().previousLocation = false
         
         //dismiss current view controller
         navigationController?.popViewController(animated: true)
@@ -133,7 +127,11 @@ class tableViewController: UITableViewController {
         Client.sharedInstance().checkForPreviousLocation { (success, prevLocation, error) in
             if success {
                 self.previousLocation = prevLocation
-                self.appDelegate.previousLocation = prevLocation
+                SavedItems.sharedInstance().previousLocation = prevLocation
+            } else {
+                self.performUIUpdatesOnMain {
+                    self.showAlert(title: (error?.localizedDescription)!)
+                }
             }
         }
     }

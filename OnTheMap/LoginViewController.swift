@@ -11,7 +11,6 @@ import UIKit
 class LoginViewController: UIViewController {
     
     var keyboardOnScreen = false
-    var appDelegate: AppDelegate!
     
     @IBOutlet weak var email: UITextField!
     @IBOutlet weak var password: UITextField!
@@ -23,19 +22,11 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        appDelegate = UIApplication.shared.delegate as! AppDelegate
-        
         subscribeToNotification(.UIKeyboardWillShow, selector: #selector(keyboardWillShow))
         subscribeToNotification(.UIKeyboardWillHide, selector: #selector(keyboardWillHide))
         subscribeToNotification(.UIKeyboardDidShow, selector: #selector(keyboardDidShow))
         subscribeToNotification(.UIKeyboardDidHide, selector: #selector(keyboardDidHide))
         logInButton.layer.cornerRadius = 5
-    }
-    
-    func performUIUpdatesOnMain(_ updates: @escaping () -> Void) {
-        DispatchQueue.main.async {
-            updates()
-        }
     }
     
     private func completeLogin() {
@@ -48,9 +39,12 @@ class LoginViewController: UIViewController {
     @IBAction func login(_ sender: Any) {
         
         Client.sharedInstance().login(email: email.text!, password: password.text!) { (success, error) in
-            if success {
-                self.performUIUpdatesOnMain {
+            
+            self.performUIUpdatesOnMain {
+                if success {
                     self.completeLogin()
+                } else {
+                    self.showAlert(title: (error?.localizedDescription)!)
                 }
             }
         }

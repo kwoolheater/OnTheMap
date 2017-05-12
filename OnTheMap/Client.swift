@@ -27,7 +27,8 @@ class Client: NSObject {
 //                let alert = UIAlertController(title: "", message: "There was a network error. Check your connection.", preferredStyle: UIAlertControllerStyle.alert)
 //                alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
 //                self.present(alert, animated: true, completion: nil)
-                completionHandlerForLogin(false, error as! NSError)
+                let userInfo = [NSLocalizedDescriptionKey : "There was a network error. Check your connection."]
+                completionHandlerForLogin(false, NSError(domain: "taskForPostorPut", code: 1, userInfo: userInfo))
                 return
             }
             let range = Range(5 ..< data!.count)
@@ -43,19 +44,15 @@ class Client: NSObject {
             
             guard let session = parsedResult["session"] as? [String:AnyObject] else {
                 print("Could not find session in \(String(describing: parsedResult))")
-//                let alert = UIAlertController(title: "", message: "Username or Password incorrect.", preferredStyle: UIAlertControllerStyle.alert)
-//                alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
-//                self.present(alert, animated: true, completion: nil)
-                completionHandlerForLogin(false, error as! NSError)
+                let userInfo = [NSLocalizedDescriptionKey : "Username or Password incorrect"]
+                completionHandlerForLogin(false,  NSError(domain: "taskForPostorPut", code: 1, userInfo: userInfo))
                 return
             }
             
             guard let sessionId = session["id"] as? String else {
                 print("Could not find ID in \(String(describing: session))")
-//                let alert = UIAlertController(title: "", message: "Username or Password incorrect.", preferredStyle: UIAlertControllerStyle.alert)
-//                alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
-//                self.present(alert, animated: true, completion: nil)
-                completionHandlerForLogin(false, error as! NSError)
+                let userInfo = [NSLocalizedDescriptionKey : "Username or Password incorrect"]
+                completionHandlerForLogin(false,  NSError(domain: "taskForPostorPut", code: 1, userInfo: userInfo))
                 return
             }
             
@@ -88,7 +85,8 @@ class Client: NSObject {
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             guard (error == nil) else {
                 print("There was an error with your request: \(String(describing: error))")
-                completionHandlerForLocation(false, error as! NSError)
+                let userInfo = [NSLocalizedDescriptionKey : error]
+                completionHandlerForLocation(false, NSError(domain: "taskForPostorPut", code: 1, userInfo: userInfo))
                 return
             }
             
@@ -132,7 +130,8 @@ class Client: NSObject {
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error
-                completionHandlerForPrevLocation(false, false, error as! NSError)
+                let userInfo = [NSLocalizedDescriptionKey : error]
+                completionHandlerForPrevLocation(false, false, NSError(domain: "taskForPostorPut", code: 1, userInfo: userInfo))
                 return
             }
             
@@ -181,7 +180,8 @@ class Client: NSObject {
         
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error…
-                completionHandlerForPost(false, error as! NSError)
+                let userInfo = [NSLocalizedDescriptionKey : error]
+                completionHandlerForPost(false, NSError(domain: "taskForPostorPut", code: 1, userInfo: userInfo))
                 return
             }
             print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
@@ -197,7 +197,8 @@ class Client: NSObject {
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error...
-                completionHandlerForGetUserInfo(false, error as! NSError)
+                let userInfo = [NSLocalizedDescriptionKey : error]
+                completionHandlerForGetUserInfo(false, NSError(domain: "taskForPostorPut", code: 1, userInfo: userInfo))
                 return
             }
             let range = Range(5..<data!.count)

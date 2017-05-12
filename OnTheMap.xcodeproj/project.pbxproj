@@ -11,6 +11,7 @@
 		4115F3FE1E9C0A7100436C84 /* people.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4115F3FD1E9C0A7100436C84 /* people.swift */; };
 		411C6E101E9E8A71004230B4 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411C6E0F1E9E8A71004230B4 /* Client.swift */; };
 		411C6E121E9EBBF8004230B4 /* AddPinController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411C6E111E9EBBF8004230B4 /* AddPinController.swift */; };
+		418BB3881EC50F8200E7D004 /* ViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418BB3871EC50F8200E7D004 /* ViewControllerExtension.swift */; };
 		41A050351E9424BC0062FAA1 /* SavedItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A050341E9424BC0062FAA1 /* SavedItems.swift */; };
 		41E6CDDF1E8EDB560014ABEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E6CDDE1E8EDB560014ABEA /* AppDelegate.swift */; };
 		41E6CDE11E8EDB560014ABEA /* MapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41E6CDE01E8EDB560014ABEA /* MapsViewController.swift */; };
@@ -25,6 +26,7 @@
 		4115F3FD1E9C0A7100436C84 /* people.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = people.swift; path = ../people.swift; sourceTree = "<group>"; };
 		411C6E0F1E9E8A71004230B4 /* Client.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		411C6E111E9EBBF8004230B4 /* AddPinController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddPinController.swift; sourceTree = "<group>"; };
+		418BB3871EC50F8200E7D004 /* ViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerExtension.swift; sourceTree = "<group>"; };
 		41A050341E9424BC0062FAA1 /* SavedItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedItems.swift; sourceTree = "<group>"; };
 		41E6CDDB1E8EDB560014ABEA /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		41E6CDDE1E8EDB560014ABEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				41E6CDE01E8EDB560014ABEA /* MapsViewController.swift */,
 				4115F3FB1E9BE1F400436C84 /* TableViewController.swift */,
 				411C6E111E9EBBF8004230B4 /* AddPinController.swift */,
+				418BB3871EC50F8200E7D004 /* ViewControllerExtension.swift */,
 				41E6CDE21E8EDB560014ABEA /* Main.storyboard */,
 				41E6CDE51E8EDB560014ABEA /* Assets.xcassets */,
 				41E6CDE71E8EDB560014ABEA /* LaunchScreen.storyboard */,
@@ -157,6 +160,7 @@
 			files = (
 				41E6CDF11E8EF8D10014ABEA /* LoginViewController.swift in Sources */,
 				411C6E121E9EBBF8004230B4 /* AddPinController.swift in Sources */,
+				418BB3881EC50F8200E7D004 /* ViewControllerExtension.swift in Sources */,
 				41A050351E9424BC0062FAA1 /* SavedItems.swift in Sources */,
 				4115F3FE1E9C0A7100436C84 /* people.swift in Sources */,
 				41E6CDE11E8EDB560014ABEA /* MapsViewController.swift in Sources */,

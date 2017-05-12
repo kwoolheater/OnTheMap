@@ -11,16 +11,13 @@ import MapKit
 
 class MapsViewController: UIViewController, MKMapViewDelegate {
 
-    var appDelegate: AppDelegate!
     var person = [people]()
     var annotations = [MKPointAnnotation]()
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        appDelegate = UIApplication.shared.delegate as! AppDelegate
-
-        //loadStudentLocations()
+        
         loadStudentLocations()
         checkForPreviousLocation()
         navigationItem.rightBarButtonItems = [
@@ -28,12 +25,6 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
             UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refresh))
             ]
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logout))
-    }
-    
-    func performUIUpdatesOnMain(_ updates: @escaping () -> Void) {
-        DispatchQueue.main.async {
-            updates()
-        }
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -68,9 +59,11 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
     
     func loadStudentLocations() {
         Client.sharedInstance().loadStudentLocations { (success, error) in
-            if success {
-                self.performUIUpdatesOnMain {
+            self.performUIUpdatesOnMain {
+                if success {
                     self.mapView.addAnnotations(SavedItems.sharedInstance().annotations)
+                } else {
+                    self.showAlert(title: (error?.localizedDescription)!)
                 }
             }
         }
@@ -78,11 +71,11 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
     
     func logout() {
         //reset constants
-        appDelegate.sessionID = nil
-        appDelegate.uniqueKey = nil
-        appDelegate.firstName = nil
-        appDelegate.lastName = nil
-        appDelegate.previousLocation = false
+        SavedItems.sharedInstance().sessionID = nil
+        SavedItems.sharedInstance().uniqueKey = nil
+        SavedItems.sharedInstance().firstName = nil
+        SavedItems.sharedInstance().lastName = nil
+        SavedItems.sharedInstance().previousLocation = false
         
         //dismiss current view controller
         navigationController?.popViewController(animated: true)
@@ -131,7 +124,11 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
         Client.sharedInstance().checkForPreviousLocation { (success, prevLocation, error) in
             if success {
                 self.previousLocation = prevLocation
-                self.appDelegate.previousLocation = prevLocation
+                SavedItems.sharedInstance().previousLocation = prevLocation
+            } else {
+                self.performUIUpdatesOnMain {
+                    self.showAlert(title: (error?.localizedDescription)!)
+                }
             }
         }
     }

@@ -43,8 +43,8 @@ class AddPinController: UIViewController, MKMapViewDelegate {
     func cancel() {
         
         performUIUpdatesOnMain {
-            let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController")
-            self.present(controller, animated: true, completion: nil)
+            self.navigationController?.popViewController(animated: true)
+            self.dismiss(animated: true, completion: nil)
         }
         
     }
@@ -90,10 +90,12 @@ class AddPinController: UIViewController, MKMapViewDelegate {
     @IBAction func post(_ sender: Any) {
         
         Client.sharedInstance().postNewLocation(location: location.text!, website: website.text!, latitude: lat as Double, longitude: lon as Double) { (success, error) in
-            if success {
-                self.performUIUpdatesOnMain {
-                    let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController")
-                    self.present(controller, animated: true, completion: nil)
+            self.performUIUpdatesOnMain {
+                if success {
+                    self.navigationController?.popViewController(animated: true)
+                    self.dismiss(animated: true, completion: nil)
+                } else {
+                    self.showAlert(title: (error?.localizedDescription)!)
                 }
             }
         }
@@ -102,13 +104,11 @@ class AddPinController: UIViewController, MKMapViewDelegate {
     func getUserInfo() {
         
         Client.sharedInstance().getUserInfo() { (success, error) in
-            
-        }
-    }
-    
-    func performUIUpdatesOnMain(_ updates: @escaping () -> Void) {
-        DispatchQueue.main.async {
-            updates()
+            self.performUIUpdatesOnMain {
+                if (error != nil) {
+                    self.showAlert(title: (error?.localizedDescription)!)
+                }
+            }
         }
     }
     
