@@ -31,6 +31,8 @@ class LoginViewController: UIViewController {
     
     private func completeLogin() {
         performUIUpdatesOnMain {
+            self.email.text = ""
+            self.password.text = ""
             let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController") as! UITabBarController
             self.present(controller, animated: true, completion: nil)
         }

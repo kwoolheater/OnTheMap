@@ -120,6 +120,48 @@ class Client: NSObject {
         return task
     }
     
+    func deleteSession(completionHandlerForDelete: @escaping (_ success: Bool, _ error: NSError?) -> Void) -> URLSessionDataTask {
+        let request = NSMutableURLRequest(url: URL(string: "https://www.udacity.com/api/session")!)
+        request.httpMethod = "DELETE"
+        var xsrfCookie: HTTPCookie? = nil
+        let sharedCookieStorage = HTTPCookieStorage.shared
+        for cookie in sharedCookieStorage.cookies! {
+            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
+        }
+        if let xsrfCookie = xsrfCookie {
+            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
+        }
+        let session = URLSession.shared
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+            if error != nil { // Handle error…
+                let userInfo = [NSLocalizedDescriptionKey: "Network connection error. Try Again."]
+                completionHandlerForDelete(false, NSError(domain: "taskForPostorPut", code: 1, userInfo: userInfo))
+                return
+            }
+            let range = Range(5..<data!.count)
+            let newData = data?.subdata(in: range) /* subset response data! */
+            let parsedResult: [String:AnyObject]!
+            do {
+                parsedResult = try JSONSerialization.jsonObject(with: newData!, options: .allowFragments) as! [String:AnyObject]
+            } catch {
+                print("Could not parse the data as JSON: '\(String(describing: data))'")
+                return
+            }
+            
+            guard let session = parsedResult["session"] as? [String:AnyObject] else {
+                print("Could not find session in \(String(describing: parsedResult))")
+                let userInfo = [NSLocalizedDescriptionKey : "Network Error. Try again."]
+                completionHandlerForDelete(false,  NSError(domain: "taskForPostorPut", code: 1, userInfo: userInfo))
+                return
+            }
+            
+            completionHandlerForDelete(true, nil)
+        }
+        task.resume()
+        return task
+    }
+    
+    
     func checkForPreviousLocation(completionHandlerForPrevLocation: @escaping (_ success: Bool, _ previousLocation: Bool, _ error: NSError?) -> Void) -> URLSessionDataTask {
         let uniqueKey = SavedItems.sharedInstance().uniqueKey!
         let urlString = "https://parse.udacity.com/parse/classes/StudentLocation?where=%7B%22uniqueKey%22%3A%22\(uniqueKey)%22%7D"

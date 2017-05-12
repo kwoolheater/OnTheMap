@@ -68,16 +68,24 @@ class MapsViewController: UIViewController, MKMapViewDelegate {
     }
     
     func logout() {
-        //reset constants
-        SavedItems.sharedInstance().sessionID = nil
-        SavedItems.sharedInstance().uniqueKey = nil
-        SavedItems.sharedInstance().firstName = nil
-        SavedItems.sharedInstance().lastName = nil
-        SavedItems.sharedInstance().previousLocation = false
+        Client.sharedInstance().deleteSession { (success, error) in
+            self.performUIUpdatesOnMain {
+                if success {
+                    //reset constants
+                    SavedItems.sharedInstance().sessionID = nil
+                    SavedItems.sharedInstance().uniqueKey = nil
+                    SavedItems.sharedInstance().firstName = nil
+                    SavedItems.sharedInstance().lastName = nil
+                    SavedItems.sharedInstance().previousLocation = false
         
-        //dismiss current view controller
-        navigationController?.popViewController(animated: true)
-        dismiss(animated: true, completion: nil)
+                    //dismiss current view controller
+                    self.navigationController?.popViewController(animated: true)
+                    self.dismiss(animated: true, completion: nil)
+                } else {
+                    self.showAlert(title: (error?.localizedDescription)!)
+                }
+            }
+        }
     }
     
     func refresh() {
