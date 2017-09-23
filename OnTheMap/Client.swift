@@ -97,7 +97,7 @@ class Client: NSObject {
             
             var results: [[String:AnyObject]]
             
-            for (key ,value) in parsedResult {
+            for (key, value) in parsedResult {
                 
                 if key == "error" {
                     let userInfo = [NSLocalizedDescriptionKey: "Student locations not available"]

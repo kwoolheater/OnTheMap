@@ -77,7 +77,7 @@ class tableViewController: UITableViewController {
                 if success {
                     //reset constants
                     SavedItems.sharedInstance().sessionID = nil
-                    SavedItems.sharedInstance().uniqueKey = nil
+                SavedItems.sharedInstance().uniqueKey = nil
                     SavedItems.sharedInstance().firstName = nil
                     SavedItems.sharedInstance().lastName = nil
                     SavedItems.sharedInstance().previousLocation = false
